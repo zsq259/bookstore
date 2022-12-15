@@ -236,6 +236,10 @@ logout
 
 将信息储存于`logs.db`中。
 
+### 块状链表库`block.h`
+
+实现了能将信息存于外存的块状链表
+
 ## 代码文件结构
 
 ```
@@ -248,6 +252,7 @@ logout
 │   │   ├── books.cpp
 │   │   ├── diary.h
 │   │   ├── diary.cpp
+│   │   ├── block.h
 │   │   ├── users.db
 │   │   ├── books.db
 │   └── └── logs.db
@@ -259,13 +264,26 @@ logout
 
 ## 类的接口及成员
 
-### user
+### user.h
 
+```cpp
+class User {
+ public:
+  string userid, username, passwd;
+  int privilege;
+  User(const string &id_, const string &passwd_, const string &name_, const int &privilege_);
+};
 ```
-void register(string id, string passwd, string Name);
-void passwd(string id, string cpasswd = "", string passwd);
-void useradd(string id, string passwd,int pre, string Name);
-void delete(string id);
+
+```cpp
+static BlockLinkList<User> array = BlockLinkList<User>("users.db");
+static stack<User> userstack;
+void Register(const string &id, const string &passwd, const string &name);
+void Passwd(const string &id, const string &curpasswd, const string &passwd);
+void Useradd(const string &id, const string &passwd, const int &privilege, const string &name);
+void Delete(const string &id);
+void Login(const string &id, const string &passwd);
+void Logout();
 ```
 
 #### book
@@ -276,6 +294,81 @@ void buy(string isbn, int sum);
 void select(string isbn);
 void modify(string isbn = "", string name = "", string author = "", string keword = "", int price = "");
 void import(int quantity, int totalcost);
+```
+
+### block.h
+
+```cpp
+template<class T>
+class mystream: public fstream{
+ public:
+  mystream &operator<<(const BlockNode<T> &a);
+  void getBlock(const int &o, BlockNode<T> &a);
+};
+```
+
+```cpp
+template<class T>
+class Node{
+ private:
+  char Key[65];
+  T Info;
+
+ public:
+  Node():Key(""), Info(T());
+  Node(const char Key_[], const T Info_);
+  Node &operator= (const Node<T> &a);
+  char* getKey();
+  friend bool operator<(const Node<int> &a, const Node<int> &b);
+  friend bool operator==(const Node<int> &a, const Node<int> &b); 
+  friend bool operator<=(const Node<int> &a, const Node<int> &b); 
+  friend ostream &operator<<(ostream &os, const Node<int> &a); 
+  friend class BlockNode<T>;
+  friend class BlockLinkList<T>;
+  ~Node(){}
+};
+```
+
+```cpp
+template<class T>
+class BlockNode {
+ private:
+  int prev = 0, next = 0;
+  int place = 0;
+  int size = 0;
+  Node<T> values[BlockSize * 3 + 1] = {};  
+  static const int maxSize = BlockSize << 1;
+  static const int minSize = BlockSize;
+
+ public:
+  friend class BlockLinkList<T>;
+  friend class mystream<T>;
+  friend ostream &operator<<(ostream &os, const BlockNode<int> &a);
+  void insertNode(const Node<T> &a);
+  void deleteNode(const int &p);
+  bool in(const char index[]);
+  bool in(const Node<T> &a);
+  ~BlockNode(){}
+};
+```
+
+```cpp
+template<class T >
+class BlockLinkList {
+ private:
+  mystream<T> iofile;
+  char FileName[65];
+  int sum = 0;
+  BlockNode<T> a, b, c;
+ public:
+  explicit BlockLinkList(const char FileName_[]);
+  int newBlock(BlockNode<T> &a);
+  void Split(BlockNode<T> &a);
+  void Merge(BlockNode<T> &a);
+  void Insert(const Node<T> &value);
+  void Delete(const Node<T> &value);
+  vector<T> Find(const char index[]);
+};
 ```
 
 ## 文件存储说明
@@ -295,3 +388,5 @@ void import(int quantity, int totalcost);
 2022/12/4：完成大体框架
 
 2022/12/7：基本完成
+
+2022/12/15：完善了对块状链表库`block.h`及账户系统库`users.h`的描述

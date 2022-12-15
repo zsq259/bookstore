@@ -5,10 +5,12 @@
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
+#include <vector>
 using std::fstream;
 using std::istream;
 using std::ostream;
 using std::cout;
+using std::vector;
 
 const int BlockSize = 168;
 
@@ -227,7 +229,7 @@ class BlockLinkList {
       head = a.next;
     }
   }
-  void Find(const char index[], const char div[]) {
+  void Find(const char index[], vector<T> &array) {
     int head = 0;
     iofile.seekg(0);
     iofile.read(reinterpret_cast<char *>(&head), sizeof(int));
@@ -236,14 +238,13 @@ class BlockLinkList {
         iofile.getBlock(head, a);
         if (a.size && a.in(index)) {
             for (int i = 0; i < a.size; ++i) {
-                if (!strcmp(index, a.values[i].Key)) { o = true;cout << a.values[i].Info << div; }
-                else if (o) { cout << '\n'; return ; }
+                if (!strcmp(index, a.values[i].Key)) { o = true; array.push_back(a.values[i].Info); }
+                else if(o) return ;
             }
         }
         head = a.next;
     }
-    if (!o) cout << "null";
-    cout <<'\n';
+    return ;
   }
   ~BlockLinkList(){
     iofile.close();
