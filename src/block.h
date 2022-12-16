@@ -42,33 +42,42 @@ class Node{
   Node():Key(""), Info(T()){}
   Node(const char Key_[], const T Info_):Info(Info_){ strcpy(Key, Key_); }
   Node &operator= (const Node<T> &a) {
+    if (this == &a) return *this;
     strcpy(Key, a.Key); 
     Info = a.Info;
     return *this;
   }
   char* getKey(){ return Key; }
-  friend bool operator<(const Node<int> &a, const Node<int> &b);
-  friend bool operator==(const Node<int> &a, const Node<int> &b); 
-  friend bool operator<=(const Node<int> &a, const Node<int> &b); 
-  friend ostream &operator<<(ostream &os, const Node<int> &a); 
+  template<class T1>
+  friend bool operator<(const Node<T1> &a, const Node<T1> &b);
+  template<class T1>
+  friend bool operator==(const Node<T1> &a, const Node<T1> &b); 
+  template<class T1>
+  friend bool operator<=(const Node<T1> &a, const Node<T1> &b); 
+  template<class T1>
+  friend ostream &operator<<(ostream &os, const Node<T1> &a);
   friend class BlockNode<T>;
   friend class BlockLinkList<T>;
   ~Node(){}
 };
 
-bool operator<(const Node<int> &a, const Node<int> &b) {
+template<class T>
+bool operator<(const Node<T> &a, const Node<T> &b) {
     return strcmp(a.Key, b.Key)? strcmp(a.Key, b.Key) < 0 : a.Info < b.Info;
 }
 
-bool operator==(const Node<int> &a, const Node<int> &b) {
+template<class T>
+bool operator==(const Node<T> &a, const Node<T> &b) {
     return !strcmp(a.Key, b.Key) && a.Info == b.Info;
 }
 
-bool operator<=(const Node<int> &a, const Node<int> &b) {
+template<class T>
+bool operator<=(const Node<T> &a, const Node<T> &b) {
     return a < b || a == b; 
 }
 
-ostream &operator<< (ostream &os, const Node<int> &a) {
+template<class T>
+ostream &operator<< (ostream &os, const Node<T> &a) {
     os << "Key=" << a.Key << '\n' << "Info=" << a.Info << '\n';
     return os;
 }
@@ -87,7 +96,8 @@ class BlockNode {
  public:
   friend class BlockLinkList<T>;
   friend class mystream<T>;
-  friend ostream &operator<<(ostream &os, const BlockNode<int> &a);
+  template<class T1>
+  friend ostream &operator<<(ostream &os, const BlockNode<T1> &a);
   void insertNode(const Node<T> &a) {
     int p = 0;
     while (p < size && values[p] < a) ++p; //the first one who >= a
@@ -98,7 +108,7 @@ class BlockNode {
   }
   void deleteNode(const int &p) {
     for (int i = p + 1; i < size; ++i) values[i - 1] = values[i];
-    values[size] = Node<int>();
+    values[size] = Node<T>();
     --size;
   }
   bool in(const char index[]) {
@@ -110,7 +120,8 @@ class BlockNode {
   ~BlockNode(){}
 };
 
-ostream &operator<<(ostream &os, const BlockNode<int> &a) {
+template<class T>
+ostream &operator<<(ostream &os, const BlockNode<T> &a) {
     os << a.prev << " next=" << a.next << " place=" << a.place << '\n';
     os << a.size << '\n';
     for (int i = 0; i < ((BlockSize << 1) | 1); ++i) os << a.values[i] << '\n';
@@ -139,6 +150,8 @@ class BlockLinkList {
         int head = 0;
         iofile.seekp(0);
         iofile.write(reinterpret_cast<const char *>(&head), sizeof(int));
+        iofile.seekg(0);
+        //iofile.read(reinterpret_cast<char *>(&head), sizeof(int));        
     }
     else {
         iofile.seekg(0, mystream<T>::end);
@@ -184,7 +197,7 @@ class BlockLinkList {
     if (a.size > a.maxSize) Split(a);
     else iofile << a;
   }
-  void Insert(const Node<T> &value) {
+  void Insert(const Node<T> &value) {    
     int head = 0;
     iofile.seekg(0);
     iofile.read(reinterpret_cast<char *>(&head), sizeof(int));
