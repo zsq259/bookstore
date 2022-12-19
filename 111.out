@@ -1,0 +1,76 @@
+Always Challenge Miracles.
+Invalid
+su root sjtu
+useradd worker0 worker0_password 3 WilsonInc
+useradd worker0 worker0_passworddd 3 Harrison-Martin
+Invalid
+useradd root2 sjtu2 7 OrtizLLC
+Invalid
+useradd root sjtu 1 White-Alvarado
+Invalid
+passwd worker0 worker0_passworddd
+passwd root sjtuuu
+delete user0
+Invalid
+logout
+Always Cook Mushroom.
+Invalid
+useradd user_ user__password
+Invalid
+register user__ user___password
+Invalid
+logout
+Invalid
+delete user
+Invalid
+passwd root sjtu
+Invalid
+Stone-Foster
+Invalid
+su worker0 worker0_password
+Invalid
+su worker0 worker0_passworddd
+passwd worker0 worker0_password worker0_password
+Invalid
+useradd user0 user0_password 1 YEFA
+register user1 user1_password hanq qing
+Invalid
+delete user1
+Invalid
+logout
+su root sjtuuu
+delete worker0
+delete worker0
+Invalid
+delete user0
+useradd user0 user0_password 1 Mendoza,PotterandMorris
+logout
+su user0 user0_password
+passwd user1 user1_password user1_passworddd
+Invalid
+logout
+su user0 user0_password
+delete user0
+Invalid
+logout
+su root sjtuuu
+delete user0
+useradd worker1 worker1_password 3 Baxter-Harrison
+useradd user2 user2_password 1 Gray-Yates
+register user3 user3_password Edwards-Hall
+logout
+su user2 user2_password
+logout
+su user3 user3_password
+logout
+su worker1 worker1_password
+useradd user4 user4_password 1 Roberts-Mcdonald
+register user5 user5_password Li,TorresandGreen
+logout
+su user4 user4_password
+logout
+su user5 user5_password
+logout
+Congratulations!
+Invalid
+exit

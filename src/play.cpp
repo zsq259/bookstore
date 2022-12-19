@@ -1,15 +1,16 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include <iomanip>
 #include "block.h"
 #include "users.h"
 #include <vector>
 using namespace std;
 
 int main(){
-    int Q = 0, op = 0;
-    cin >> Q;
-    char str[65], ret[65];
-    
+    char a1[64] = "helgo";
+    char b1[64] = "www";
+    strncat(b1, a1 + 1, 1);
+    cout << b1 << '\n';
     
 }

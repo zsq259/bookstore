@@ -8,5 +8,6 @@ class error{
   string msg;
 
  public:
+  error(){}
   error(const string &msg_):msg(msg_){} 
 };

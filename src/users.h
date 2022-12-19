@@ -50,5 +50,6 @@ void Useradd(const string &id, const string &passwd, const int &privilege, const
 void Delete(const string &id);
 void Login(const string &id, const string &passwd);
 void Logout();
+int GetPrivilege();
 
 #endif

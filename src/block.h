@@ -259,6 +259,19 @@ class BlockLinkList {
     }
     return ;
   }
+  void FindAll(vector<T> &array) {
+    int head = 0;
+    iofile.seekg(0);
+    iofile.read(reinterpret_cast<char *>(&head), sizeof(int));
+    while(head) {
+        iofile.getBlock(head, a);
+        for (int i = 0; i < a.size; ++i) {
+            array.push_back(a.values[i].Info);
+        }
+        head = a.next;
+    }
+    return ;
+  }
   ~BlockLinkList(){
     iofile.close();
   }
