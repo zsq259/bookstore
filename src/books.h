@@ -17,6 +17,23 @@ class Book{
   int sum = 0, keycnt = 0;
   double price = 0;
   Book(){}
+  Book(const Book &a):sum(a.sum), keycnt(a.keycnt), price(a.price) {
+      strcpy(ISBN, a.ISBN);
+      strcpy(author, a.author);
+      strcpy(name, a.name);
+      for (int i = 0; i < keycnt; ++i) strcpy(keyword[i], a.keyword[i]);
+  }
+  Book &operator=(const Book &a) {
+      if (this == &a) return *this;
+      sum = a.sum;
+      keycnt = a.keycnt;
+      price = a.price;
+      strcpy(ISBN, a.ISBN);
+      strcpy(author, a.author);
+      strcpy(name, a.name);
+      for (int i = 0; i < keycnt; ++i) strcpy(keyword[i], a.keyword[i]);
+      return *this;
+  }
   const bool operator<(const Book &b) const {
       return strcmp(ISBN, b.ISBN) < 0;
   }

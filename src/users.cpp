@@ -87,7 +87,7 @@ void Login(const string &id, const string &passwd) {
         if (userstack.empty()) throw error("Invalid\n");
         if (userstack.top().privilege <= a.privilege) throw error("Invalid\n");
     }
-    if (strcmp(passwd.c_str(), a.passwd)) throw error("Invalid\n");
+    else if (strcmp(passwd.c_str(), a.passwd)) throw error("Invalid\n");
     userstack.push(a);
     StackPush(Book());
 }

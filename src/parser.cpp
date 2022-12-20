@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include "parser.h"
 #include "users.h"
 #include "books.h"
 #include "diary.h"
@@ -24,6 +25,7 @@ void CheckId(const string &str) {
 } 
 
 void CheckNumber(const string &str) {
+    if (str.size() > 10) throw error();
     for (int i = 0, k = str.size(); i < k; ++i) {
         if (!IsNumber(str[i])) throw error();
     }
@@ -55,9 +57,10 @@ void Solve(const char ch[], bool &working) {
     int n = 0;
     string str[15] = {};
     for (int i = 0, k = strlen(ch); i < k; ++i) {
-        if (ch[i] == ' ') { if(i && ch[i-1] != ' ') ++n; continue; }
+        if (ch[i] == ' ') { if(i + 1 < k && ch[i+1] != ' ') ++n; continue; }
         str[n] += ch[i];
     }
+    if (!str[0].size()) return ;
     //cout << ch << '\n';
     try {
         if (str[0] == "quit" || str[0] == "exit") {
@@ -65,8 +68,9 @@ void Solve(const char ch[], bool &working) {
             working = false; 
         }
         else if (str[0] == "su") {
-            if (n == 2) CheckId(str[1]), CheckId(str[2]), Login(str[1], str[2]);
-            else if (n == 1) CheckId(str[1]), Login(str[1], "");
+            CheckId(str[1]);
+            if (n == 2) CheckId(str[2]), Login(str[1], str[2]);
+            else if (n == 1) Login(str[1], "");
             else throw error("Invalid\n");
         }
         else if (str[0] == "logout") {
@@ -150,7 +154,16 @@ void Solve(const char ch[], bool &working) {
         }
         else if (str[0] == "show") {
             if (str[1] == "finance") {
-                
+                if (n > 2) throw error();
+                if (n == 1) {
+                    ShowFinance(GetCount());
+                }
+                else {
+                    CheckNumber(str[2]);
+                    int count = stoi(str[2]);
+                    if (!count) cout << '\n';
+                    else ShowFinance(count);
+                }
             }
             else {
                 if (n == 0) Show(0, "");

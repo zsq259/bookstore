@@ -13,8 +13,10 @@ int main() {
     char ch[641];
     bool working = true;
     Init();
+    InitLog();
     while(working) {
         if (!cin.getline(ch, 640)) working = false;
         else Solve(ch, working);
     }
+    WriteLog();
 }

@@ -1,3 +1,5 @@
+#ifndef BOOKSTORE_EXCEPTION_H
+#define BOOKSTORE_EXCEPTION_H
 #include <iostream>
 #include <cstdio>
 #include <cstring>
@@ -11,3 +13,5 @@ class error{
   error(){}
   error(const string &msg_):msg(msg_){} 
 };
+
+#endif
