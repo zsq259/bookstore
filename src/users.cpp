@@ -40,6 +40,7 @@ void Passwd(const string &id, const string &curpasswd, const string &passwd) {
 }
 
 void Useradd(const string &id, const string &passwd, const int &privilege, const string &name) {
+    if (privilege != 1 && privilege != 3) throw error();
     char userid[32];
     strcpy(userid, id.c_str());
     vector<User> v;
