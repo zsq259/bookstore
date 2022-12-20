@@ -59,7 +59,18 @@ void Delete(const string &id) {
     if (v.empty() || userstack.empty()) throw error("Invalid\n");
     User now = userstack.top();
     if (now.privilege < 7) throw error("Invalid\n");
-    if (!strcmp(now.userid, id.c_str())) throw error("Invalid\n");
+    bool flag = true;
+    stack<User> temp;
+    while (!userstack.empty()) {
+        if (!strcmp(userstack.top().userid, id.c_str())) flag = false;
+        temp.push(userstack.top());
+        userstack.pop();
+    }
+    while (!temp.empty()) {
+        userstack.push(temp.top());
+        temp.pop();
+    }
+    if (!flag) throw error();
     User a = v.back();
     array.Delete(Node<User>(userid, a));
 }
