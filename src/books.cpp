@@ -11,11 +11,14 @@ using std::cout;
 using std::fixed;
 using std::setprecision;
 using std::vector;
-using std::stack;
 
 ostream& operator<<(ostream &os, const Book &a) {
     os << a.ISBN << '\t' << a.name << '\t' << a.author << '\t';
-    for (int i = 0; i < a.keycnt; ++i) os << a.keyword[i] << '\t';
+    if (a.keycnt) {
+        os << a.keyword[0];
+        for (int i = 1; i < a.keycnt; ++i) os << '|' << a.keyword[i];
+    }
+    os << '\t';
     os << fixed << setprecision(2) << a.price << '\t' << a.sum << '\n';
     return os;
 }
