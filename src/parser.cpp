@@ -14,17 +14,31 @@ bool IsLetter(char c) {
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 }
 
-void CheckId(string str) {
+void CheckId(const string &str) {
+    bool o;
     for (int i = 0, k = str.size(); i < k; ++i) {
-        bool o = false;
+        o = false;
         if (IsNumber(str[i]) || IsLetter(str[i]) || str[i] == '_') o = true;
         if (!o) throw error();
     }
 } 
 
-void CheckPrivilege(string str) {
-    bool o = (str.size() == 1 && IsNumber(str[0]));
-    if (!o) throw error();
+void CheckNumber(const string &str) {
+    for (int i = 0, k = str.size(); i < k; ++i) {
+        if (!IsNumber(str[i])) throw error();
+    }
+}
+
+void CheckFloat(const string &str) {
+    for (int i = 0, k = str.size(); i < k; ++i) {
+        if (!IsNumber(str[i]) && str[i] != '.') throw error();
+    }
+}
+
+void CheckKeyword(const string &str) {
+    for (int i = 0, k = str.size(); i < k; ++i) {
+        if (str[i] == '\"') throw error(); 
+    }
 }
 
 void Solve(const char ch[], bool &working) {
@@ -63,19 +77,38 @@ void Solve(const char ch[], bool &working) {
         else if (str[0] == "useradd") {
             if (n != 4) throw error("Invalid\n");
             CheckId(str[1]); CheckId(str[2]);
-            CheckPrivilege(str[3]);
-            Useradd(str[1], str[2], str[3][0] - '0', str[4]);
+            CheckNumber(str[3]);
+            Useradd(str[1], str[2], stoi(str[3]), str[4]);
         }
         else if (str[0] == "delete") {
             if (n != 1) throw error("Invalid\n");
             CheckId(str[1]);
             Delete(str[1]);
         }
-        else if (str[0] == "buy") {}
-        else if (str[0] == "select") {}
-        else if (str[0] == "modify") {}
-        else if (str[0] == "import") {}
-        else if (str[0] == "import") {}
+        else if (str[0] == "buy") {
+            if (n != 2) throw error();
+            CheckKeyword(str[1]);
+            CheckNumber(str[2]);
+            char ISBN[22];
+            strcpy(ISBN, str[1].c_str());
+            Buy(ISBN, stoi(str[2]));
+        }
+        else if (str[0] == "select") {
+            if (n != 1) throw error();
+            CheckKeyword(str[1]);
+            char ISBN[22];
+            strcpy(ISBN, str[1].c_str());
+            Select(ISBN);
+        }
+        else if (str[0] == "modify") {
+
+        }
+        else if (str[0] == "import") {
+            if (n != 2) throw error();
+            CheckNumber(str[1]);
+            CheckFloat(str[2]);
+            Import(stoi(str[1]), stod(str[2]));
+        }
         else if (str[0] == "show") {
             if (str[1] == "finance") {}
             else {}

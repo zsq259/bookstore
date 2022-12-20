@@ -8,10 +8,6 @@
 #include <iomanip>
 #include "users.h"
 #include "block.h"
-using std::cout;
-using std::fixed;
-using std::setprecision;
-using std::vector;
 using std::stack;
 
 class Book{
@@ -39,24 +35,15 @@ static BlockLinkList<Book> books_keyword("books_keyword.db");
 static stack<Book> bookstack;
 
 void StackPop();
-
 void StackPush(const Book &a);
-
 void DeleteBook(const Book &a);
-
 void AddBook(const Book &a);
-
 void ModifyBook(const Book &a, const Book &b);
-
 void Show(int type, const char Key[]);
-
 void Buy (const char Key[], const int &quantity);
-
 void Select(const char Key[]);
-
 void Modify(const int &type, const char ISBN[], const char name[], 
             const char author[], const char keyword[], const double &price);
-
 void Import(const int &quantity, const double &cost);
 
 #endif
