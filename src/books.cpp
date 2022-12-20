@@ -52,12 +52,13 @@ void ModifyBook(const Book &a, const Book &b) {
 
 void Show(int type, const char Key[]) {
     if (GetPrivilege() < 1) throw error();
+    if (type && !strlen(Key)) throw error();
     vector<Book> v;
     if (type == 0) books_ISBN.FindAll(v);
-    else if (type == 1) books_ISBN.Find(Key, v);
-    else if (type == 2) books_name.Find(Key, v);
-    else if (type == 3) books_author.Find(Key, v);
-    else if (type == 4) books_keyword.Find(Key, v);
+    else if (type == 4) books_ISBN.Find(Key, v);
+    else if (type == 3) books_name.Find(Key, v);
+    else if (type == 2) books_author.Find(Key, v);
+    else if (type == 1) books_keyword.Find(Key, v);
     if (v.empty()) cout << '\n';
     else for (Book x:v) cout << x;
 }
@@ -92,6 +93,7 @@ void Modify(const int &type, const char ISBN[], const char name[],
     if (GetPrivilege() < 3) throw error();
     if (bookstack.empty()) throw error();
     Book a = bookstack.top();
+    Book b = a;
     if (!strlen(a.ISBN)) throw error(); 
     if (type & (1 << 4)) {
         if (!strcmp(a.ISBN, ISBN)) throw error();
@@ -105,8 +107,12 @@ void Modify(const int &type, const char ISBN[], const char name[],
             if (keyword[i] == '|') { a.keycnt++; continue; }
             strncat(a.keyword[a.keycnt], keyword + i, 1);
         }
+        a.keycnt++;
     }
     if (type & 1) a.price = price;
+    bookstack.pop();
+    bookstack.push(a);
+    ModifyBook(b, a);
 }
 
 void Import(const int &quantity, const double &cost) {

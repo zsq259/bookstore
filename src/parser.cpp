@@ -41,6 +41,16 @@ void CheckKeyword(const string &str) {
     }
 }
 
+int GetType(const string &str) {
+    int length = str.size();
+    if (length >= 6 && str.substr(0, 6) == "-ISBN=") return 4;
+    if (length >= 6 && str.substr(0, 6) == "-name=") return 3;
+    if (length >= 8 && str.substr(0, 8) == "-author=") return 2;
+    if (length >= 9 && str.substr(0, 9) == "-keyword=") return 1;
+    if (length >= 7 && str.substr(0, 7) == "-price=") return 0;
+    throw error();
+}
+
 void Solve(const char ch[], bool &working) {
     int n = 0;
     string str[15] = {};
@@ -48,6 +58,7 @@ void Solve(const char ch[], bool &working) {
         if (ch[i] == ' ') { if(i && ch[i-1] != ' ') ++n; continue; }
         str[n] += ch[i];
     }
+    //cout << ch << '\n';
     try {
         if (str[0] == "quit" || str[0] == "exit") {
             if (n) throw error("Invalid\n");
@@ -101,7 +112,35 @@ void Solve(const char ch[], bool &working) {
             Select(ISBN);
         }
         else if (str[0] == "modify") {
-
+            int type = 0;
+            char ISBN[22], name[62], author[62], keyword[62];
+            double price = 0;
+            for (int i = 1; i <= n; ++i) {
+                int o = GetType(str[i]);
+                if (type & (1 << o)) throw error();
+                type |= (1 << o);
+                if (o == 4) {
+                    strcpy(ISBN, str[i].substr(6).c_str());
+                }
+                else if (o == 3) {
+                    CheckKeyword(str[i].substr(7, str[i].size() - 8));
+                    strcpy(name, str[i].substr(7, str[i].size() - 8).c_str());
+                    //cout << "name=" << name << '\n';
+                }
+                else if (o == 2) {
+                    CheckKeyword(str[i].substr(9, str[i].size() - 10));
+                    strcpy(author, str[i].substr(9, str[i].size() - 10).c_str());
+                }
+                else if (o == 1) {
+                    CheckKeyword(str[i].substr(10, str[i].size() - 11));
+                    strcpy(keyword, str[i].substr(10, str[i].size() - 11).c_str());
+                }
+                else if (o == 0) {
+                    CheckFloat(str[i].substr(7));
+                    price = stod(str[i].substr(7));
+                }
+            }
+            Modify(type, ISBN, name, author, keyword, price);
         }
         else if (str[0] == "import") {
             if (n != 2) throw error();
@@ -110,8 +149,35 @@ void Solve(const char ch[], bool &working) {
             Import(stoi(str[1]), stod(str[2]));
         }
         else if (str[0] == "show") {
-            if (str[1] == "finance") {}
-            else {}
+            if (str[1] == "finance") {
+                
+            }
+            else {
+                if (n == 0) Show(0, "");
+                else {
+                    if (n > 1) throw error();
+                    int type = GetType(str[1]);
+                    char Key[62];
+                    if (type == 4) {
+                        strcpy(Key, str[1].substr(6).c_str());
+                    }
+                    else if (type == 3) {
+                        CheckKeyword(str[1].substr(7, str[1].size() - 8));
+                        strcpy(Key, str[1].substr(7, str[1].size() - 8).c_str());
+                    }
+                    else if (type == 2) {
+                        CheckKeyword(str[1].substr(9, str[1].size() - 10));
+                        strcpy(Key, str[1].substr(9, str[1].size() - 10).c_str());
+                    }
+                    else if (type == 1) {
+                        CheckKeyword(str[1].substr(10, str[1].size() - 11));
+                        strcpy(Key, str[1].substr(10, str[1].size() - 11).c_str());
+                        for (int i = 0, k = strlen(Key); i < k; ++i) 
+                            if (Key[i] == '|') throw error();
+                    }
+                    Show(type, Key);
+                }
+            }
         }
         else if (str[0] == "log") {}
         else throw error("Invalid\n");
