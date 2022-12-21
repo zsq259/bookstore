@@ -1,5 +1,6 @@
 *.pdf
 *.out
+*.in
 *.db
 
 build
