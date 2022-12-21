@@ -15,11 +15,7 @@ using std::vector;
 
 ostream& operator<<(ostream &os, const Book &a) {
     os << a.ISBN << '\t' << a.name << '\t' << a.author << '\t';
-    if (a.keycnt) {
-        os << a.keyword[0];
-        for (int i = 1; i < a.keycnt; ++i) os << '|' << a.keyword[i];
-    }
-    os << '\t';
+    os << a.keyword << '\t';
     os << fixed << setprecision(2) << a.price << '\t' << a.sum << '\n';
     return os;
 }
@@ -36,14 +32,32 @@ void DeleteBook(const Book &a) {
     books_ISBN.Delete(Node<Book>(a.ISBN, a));
     books_name.Delete(Node<Book>(a.name, a));
     books_author.Delete(Node<Book>(a.author, a));
-    for (int i = 0; i < a.keycnt; ++i) books_keyword.Delete(Node<Book>(a.keyword[i], a));
+    char temp[62] = {};
+    for (int i = 0, k = strlen(a.keyword); i < k; ++i) {
+        if (a.keyword[i] == '|') { 
+            books_keyword.Delete(Node<Book>(temp, a)); 
+            strcpy(temp, "");
+            continue; 
+        }
+        strncat(temp,a.keyword + i, 1);
+    }
+    if (strlen(temp)) books_keyword.Delete(Node<Book>(temp, a));
 }
 
 void AddBook(const Book &a) {
     books_ISBN.Insert(Node<Book>(a.ISBN, a));
     books_name.Insert(Node<Book>(a.name, a));
     books_author.Insert(Node<Book>(a.author, a));
-    for (int i = 0; i < a.keycnt; ++i) books_keyword.Insert(Node<Book>(a.keyword[i], a));
+    char temp[62] = {};
+    for (int i = 0, k = strlen(a.keyword); i < k; ++i) {
+        if (a.keyword[i] == '|') { 
+            books_keyword.Insert(Node<Book>(temp, a)); 
+            strcpy(temp, "");
+            continue; 
+        }
+        strncat(temp,a.keyword + i, 1);
+    }
+    if (strlen(temp)) books_keyword.Insert(Node<Book>(temp, a));
 }
 
 void ModifyBook(const Book &a, const Book &b) {
@@ -112,18 +126,20 @@ void Modify(const int &type, const char ISBN[], const char name[],
     if (type & (1 << 3)) strcpy(a.name, name);
     if (type & (1 << 2)) strcpy(a.author, author);
     if (type & (1 << 1)) {
-        for (int i = 0; i < a.keycnt; ++i) {
-            strcpy(a.keyword[i], "");
+        strcpy(a.keyword, keyword);
+        char temp[62][62] = {};
+        int cnt = 0;
+        for (int i = 0, k = strlen(a.keyword); i < k; ++i) {
+            if (a.keyword[i] == '|') { 
+                ++cnt;
+                continue; 
+            }
+            strncat(temp[cnt],a.keyword + i, 1);
         }
-        a.keycnt = 0;
-        for (int i = 0, k = strlen(keyword); i < k; ++i) {
-            if (keyword[i] == '|') { a.keycnt++; continue; }
-            strncat(a.keyword[a.keycnt], keyword + i, 1);
-        }
-        a.keycnt++;
-        for (int i = 0; i < a.keycnt; ++i) 
-            for (int j = i + 1; j < a.keycnt; ++j) 
-                if (!strcmp(a.keyword[i], a.keyword[j])) throw error();
+        ++cnt;
+        for (int i = 0; i < cnt; ++i) 
+            for (int j = i + 1; j < cnt; ++j) 
+                if (!strcmp(temp[i], temp[j])) throw error();
     }
     if (type & 1) a.price = price;
     bookstack.pop();
@@ -146,8 +162,13 @@ void Import(const int &quantity, const double &cost) {
     if (GetPrivilege() < 3) throw error();
     if (bookstack.empty() || !strlen(bookstack.top().ISBN)) throw error();
     if (quantity <= 0 || cost <= 0) throw error();
+    vector<Book> v;
     Book a = bookstack.top();
+    books_ISBN.Find(a.ISBN, v);
+    if (!v.empty()) a = v.back();
     a.sum += quantity;
+    bookstack.pop();
+    bookstack.push(a);
     NewDeal(-cost);
     ModifyBook(a, a);
 }

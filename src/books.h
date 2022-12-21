@@ -13,25 +13,24 @@ using std::stack;
 class Book{
  public:
   char ISBN[22] = {}, author[62] = {}, name[62] = {};
-  char keyword[62][62] = {};
-  int sum = 0, keycnt = 0;
+  char keyword[62] = {};
+  int sum = 0;
   double price = 0;
   Book(){}
-  Book(const Book &a):sum(a.sum), keycnt(a.keycnt), price(a.price) {
+  Book(const Book &a):sum(a.sum), price(a.price) {
       strcpy(ISBN, a.ISBN);
       strcpy(author, a.author);
       strcpy(name, a.name);
-      for (int i = 0; i < keycnt; ++i) strcpy(keyword[i], a.keyword[i]);
+      strcpy(keyword, a.keyword);
   }
   Book &operator=(const Book &a) {
       if (this == &a) return *this;
       sum = a.sum;
-      keycnt = a.keycnt;
       price = a.price;
       strcpy(ISBN, a.ISBN);
       strcpy(author, a.author);
       strcpy(name, a.name);
-      for (int i = 0; i < keycnt; ++i) strcpy(keyword[i], a.keyword[i]);
+      strcpy(keyword, a.keyword);
       return *this;
   }
   const bool operator<(const Book &b) const {
