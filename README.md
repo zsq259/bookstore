@@ -222,40 +222,58 @@ logout
 
 ## 主体逻辑说明
 
-### 账户系统库`user.h`
+### `parser.h`
+
+用于对输入的命令进行切片以及处理调用相关函数。
+
+### `user.h`
+
+账户系统库
 
 用一个栈（内存）存登录情况。
 
 将账户信息存于`users.db`中。
 
-### 图书系统库`book.h`
+### `book.h`
+
+图书系统库
 
 用文件+块状链表储存书籍信息于 `books.db`中。
 
-### 日志系统库`diary.h`
+同样用一个栈存选中的图书情况。
+
+### `diary.h`
+
+日志系统库
 
 将信息储存于`logs.db`中。
 
-### 块状链表库`block.h`
+### `block.h`
+
+块状链表库
 
 实现了能将信息存于外存的块状链表
+
+### `exception.h`
+
+错误类
 
 ## 代码文件结构
 
 ```
 ├── Bookstore
 │   ├── src
-│   │   ├── bookstore.cpp
-│   │   ├── users.h
-│   │   ├── users.cpp
-│   │   ├── books.h
-│   │   ├── books.cpp
-│   │   ├── diary.h
-│   │   ├── diary.cpp
 │   │   ├── block.h
-│   │   ├── users.db
-│   │   ├── books.db
-│   └── └── logs.db
+│   │   ├── books.cpp
+│   │   ├── books.h
+│   │   ├── diary.cpp
+│   │   ├── diary.h
+│   │   ├── exception.h
+│   │   ├── main.cpp
+│   │   ├── parser.cpp
+│   │   ├── parser.h
+│   │   ├── users.cpp
+│   └── └── users.h
 ├── CMakeLists.txt
 └─── README.md
 ```
@@ -263,38 +281,6 @@ logout
 
 
 ## 类的接口及成员
-
-### user.h
-
-```cpp
-class User {
- public:
-  string userid, username, passwd;
-  int privilege;
-  User(const string &id_, const string &passwd_, const string &name_, const int &privilege_);
-};
-```
-
-```cpp
-static BlockLinkList<User> array = BlockLinkList<User>("users.db");
-static stack<User> userstack;
-void Register(const string &id, const string &passwd, const string &name);
-void Passwd(const string &id, const string &curpasswd, const string &passwd);
-void Useradd(const string &id, const string &passwd, const int &privilege, const string &name);
-void Delete(const string &id);
-void Login(const string &id, const string &passwd);
-void Logout();
-```
-
-#### book
-
-```
-void show(string isbn = "", string name = "", string author = "", string keword = "");
-void buy(string isbn, int sum);
-void select(string isbn);
-void modify(string isbn = "", string name = "", string author = "", string keword = "", int price = "");
-void import(int quantity, int totalcost);
-```
 
 ### block.h
 
@@ -371,11 +357,107 @@ class BlockLinkList {
 };
 ```
 
+### books.h
+
+```cpp
+class Book{
+ public:
+  char ISBN[22] = {}, author[62] = {}, name[62] = {};
+  char keyword[62] = {};
+  int sum = 0;
+  double price = 0;
+  Book(){}
+  Book(const Book &a):sum(a.sum), price(a.price);
+  Book &operator=(const Book &a);
+  const bool operator<(const Book &b) const;
+  const bool operator==(const Book &b) const;
+  friend ostream& operator<<(ostream &os, const Book &a);
+};
+```
+
+```cpp
+static BlockLinkList<Book> books_ISBN("books_ISBN.db");
+static BlockLinkList<Book> books_name("books_name.db");
+static BlockLinkList<Book> books_author("books_author.db");
+static BlockLinkList<Book> books_keyword("books_keyword.db");
+static stack<Book> bookstack;
+void StackPop();
+void StackPush(const Book &a);
+void DeleteBook(const Book &a);
+void AddBook(const Book &a);
+void ModifyBook(const Book &a, const Book &b);
+void Show(int type, const char Key[]);
+void Buy (const char Key[], const int &quantity);
+void Select(const char Key[]);
+void Modify(const int &type, const char ISBN[], const char name[], 
+            const char author[], const char keyword[], const double &price);
+void Import(const int &quantity, const double &cost);
+```
+
+### diary.h
+
+```cpp
+static BlockLinkList<double> logs("logs.db");
+static int logscnt;
+void InitLog();
+void WriteLog();
+void NewDeal(const double &sum);
+void ShowFinance(const int &count);
+int GetCount();
+```
+
+### exception.h
+
+```cpp
+class error{
+ private:
+  string msg;
+
+ public:
+  error(){}
+  error(const string &msg_):msg(msg_){} 
+};
+```
+
+### parser.h
+
+```cpp
+void Solve(const char ch[], bool &working);
+```
+
+### user.h
+
+```cpp
+class User {
+ public:
+  string userid, username, passwd;
+  int privilege;
+  User(const string &id_, const string &passwd_, const string &name_, const int &privilege_);
+};
+```
+
+```cpp
+static BlockLinkList<User> array = BlockLinkList<User>("users.db");
+static stack<User> userstack;
+void Register(const string &id, const string &passwd, const string &name);
+void Passwd(const string &id, const string &curpasswd, const string &passwd);
+void Useradd(const string &id, const string &passwd, const int &privilege, const string &name);
+void Delete(const string &id);
+void Login(const string &id, const string &passwd);
+void Logout();
+```
+
 ## 文件存储说明
 
 `users.db`：账户信息。
 
- `books.db`：书籍信息。
+ `books_ISBN.db`：以 ISBN 为关键字的书籍信息。
+
+ `books_name.db`：以 name 为关键字的书籍信息。
+
+ `books_author.db`：以 author 为关键字的书籍信息。
+
+ `books_keyword.db`：以 keyword 为关键字的书籍信息。
 
 `logs.db`：信息储存。
 
@@ -385,8 +467,11 @@ class BlockLinkList {
 
 ## 修订记录
 
-2022/12/4：完成大体框架
+2022/12/4：完成大体框架。
 
-2022/12/7：基本完成
+2022/12/7：基本完成。
 
-2022/12/15：完善了对块状链表库`block.h`及账户系统库`users.h`的描述
+2022/12/15：完善了对块状链表库`block.h`及账户系统库`users.h`的描述。
+
+2022/12/21：完善了代码文件结构，完善了对图书库`books.h`，日志系统库`diary.h`，错误库`excepton.h`以及语法分析`parser.h`的描述，完善了文件存储说明。
+
