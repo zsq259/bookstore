@@ -39,6 +39,7 @@ void CheckNumber(const string &str) {
 
 void CheckFloat(const string &str) {
     if (str.size() > 13) throw error();
+    if (str[0] == '0' && (str.size() > 1 && str[1] != '.')) throw error();
     for (int i = 0, k = str.size(); i < k; ++i) {
         if (!IsNumber(str[i]) && str[i] != '.') throw error();
     }
@@ -71,6 +72,7 @@ void Solve(const char ch[], bool &working) {
         if (ch[i] == ' ') { if(i + 1 < k && ch[i+1] != ' ') ++n; continue; }
         str[n] += ch[i];
     }
+    //for (int i = 0; i <= n; ++i) cout << str[i] << ' ';
     //cout << '\n';
     //cout << "n=" << n << '\n';
     if (!str[0].size()) return ;
@@ -138,7 +140,7 @@ void Solve(const char ch[], bool &working) {
                 if (type & (1 << o)) throw error();
                 type |= (1 << o);
                 if (o == 4) {
-                    CheckLength(str[i], 20);
+                    CheckLength(str[i], 20 + 6);
                     strcpy(ISBN, str[i].substr(6).c_str());
                 }
                 else if (o == 3) {
@@ -187,7 +189,7 @@ void Solve(const char ch[], bool &working) {
                     int type = GetType(str[1]);
                     char Key[62];
                     if (type == 4) {
-                        CheckLength(str[1], 20);
+                        CheckLength(str[1], 20 + 6);
                         strcpy(Key, str[1].substr(6).c_str());
                     }
                     else if (type == 3) {
