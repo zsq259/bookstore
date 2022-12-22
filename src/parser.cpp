@@ -37,6 +37,12 @@ void CheckNumber(const string &str) {
     if (stoll(str) > 2147483647) throw error();
 }
 
+void CheckControl(const string &str) {
+    for (int i = 0, k = str.size(); i < k; ++i) {
+        if (str[i] <= 32 && str[i] >= 127) throw error();
+    }
+}
+
 void CheckFloat(const string &str) {
     if (str.size() > 13) throw error();
     if (str[0] == '.' || str[str.size()-1] == '.') throw error();
@@ -150,15 +156,18 @@ void Solve(const char ch[], bool &working) {
                     strcpy(ISBN, str[i].substr(6).c_str());
                 }
                 else if (o == 3) {
+                    if (str[i][str[i].size()-1] != '\"') throw error();
                     CheckKeyword(str[i].substr(7, str[i].size() - 8), false);
                     strcpy(name, str[i].substr(7, str[i].size() - 8).c_str());
                     //cout << "name=" << name << '\n';
                 }
                 else if (o == 2) {
+                    if (str[i][str[i].size()-1] != '\"') throw error();
                     CheckKeyword(str[i].substr(9, str[i].size() - 10), false);
                     strcpy(author, str[i].substr(9, str[i].size() - 10).c_str());
                 }
                 else if (o == 1) {
+                    if (str[i][str[i].size()-1] != '\"') throw error();
                     CheckKeyword(str[i].substr(10, str[i].size() - 11), true);
                     strcpy(keyword, str[i].substr(10, str[i].size() - 11).c_str());
                 }
@@ -199,14 +208,17 @@ void Solve(const char ch[], bool &working) {
                         strcpy(Key, str[1].substr(6).c_str());
                     }
                     else if (type == 3) {
+                        if (str[1][str[1].size()-1] != '\"') throw error();
                         CheckKeyword(str[1].substr(7, str[1].size() - 8), false);
                         strcpy(Key, str[1].substr(7, str[1].size() - 8).c_str());
                     }
                     else if (type == 2) {
+                        if (str[1][str[1].size()-1] != '\"') throw error();
                         CheckKeyword(str[1].substr(9, str[1].size() - 10), false);
                         strcpy(Key, str[1].substr(9, str[1].size() - 10).c_str());
                     }
                     else if (type == 1) {
+                        if (str[1][str[1].size()-1] != '\"') throw error();
                         CheckKeyword(str[1].substr(10, str[1].size() - 11), false);
                         strcpy(Key, str[1].substr(10, str[1].size() - 11).c_str());
                         for (int i = 0, k = strlen(Key); i < k; ++i) 
