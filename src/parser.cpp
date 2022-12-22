@@ -154,24 +154,29 @@ void Solve(const char ch[], bool &working) {
                 if (o == 4) {
                     CheckLength(str[i], 20 + 6);
                     strcpy(ISBN, str[i].substr(6).c_str());
+                    if (!strlen(ISBN)) throw error();
                 }
                 else if (o == 3) {
                     if (str[i][str[i].size()-1] != '\"') throw error();
                     CheckKeyword(str[i].substr(7, str[i].size() - 8), false);
                     strcpy(name, str[i].substr(7, str[i].size() - 8).c_str());
+                    if (!strlen(name)) throw error();
                     //cout << "name=" << name << '\n';
                 }
                 else if (o == 2) {
                     if (str[i][str[i].size()-1] != '\"') throw error();
                     CheckKeyword(str[i].substr(9, str[i].size() - 10), false);
                     strcpy(author, str[i].substr(9, str[i].size() - 10).c_str());
+                    if (!strlen(author)) throw error();
                 }
                 else if (o == 1) {
                     if (str[i][str[i].size()-1] != '\"') throw error();
                     CheckKeyword(str[i].substr(10, str[i].size() - 11), true);
                     strcpy(keyword, str[i].substr(10, str[i].size() - 11).c_str());
+                    if (!strlen(keyword)) throw error();
                 }
                 else if (o == 0) {
+                    if (str[i].size() <= 7) throw error();
                     CheckFloat(str[i].substr(7));
                     price = stod(str[i].substr(7));
                 }
