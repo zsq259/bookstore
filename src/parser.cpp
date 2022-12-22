@@ -68,20 +68,21 @@ int GetType(const string &str) {
 }
 
 void Solve(const char ch[], bool &working) {
-    int n = 0;
-    string str[15] = {};
-    int p = 0;
-    while (ch[p] == ' ') ++p;
-    for (int i = p, k = strlen(ch); i < k; ++i) {
-        //cout << ch[i];
-        if (ch[i] == ' ') { if(i + 1 < k && ch[i+1] != ' ') ++n; continue; }
-        str[n] += ch[i];
-    }
-    //for (int i = 0; i <= n; ++i) cout << str[i] << ' ';
-    //cout << '\n';
-    //cout << "n=" << n << '\n';
-    if (!str[0].size()) return ;
-    try {
+    try{
+        int n = 0;
+        string str[15] = {};
+        int p = 0;
+        while (ch[p] == ' ') ++p;
+        for (int i = p, k = strlen(ch); i < k; ++i) {
+            //cout << ch[i];
+            if (ch[i] <= 31 || ch[i] >= 127) throw error();
+            if (ch[i] == ' ') { if(i + 1 < k && ch[i+1] != ' ') ++n; continue; }
+            str[n] += ch[i];
+        }
+        //for (int i = 0; i <= n; ++i) cout << str[i] << ' ';
+        //cout << '\n';
+        //cout << "n=" << n << '\n';
+        if (!str[0].size()) return ;
         if (str[0] == "quit" || str[0] == "exit") {
             if (n) throw error("Invalid\n");
             working = false; 
