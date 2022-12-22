@@ -10,13 +10,17 @@ using std::cin;
 using std::string;
 
 int main() {
-    char ch[641];
+    string str;
+    char ch[645];
     bool working = true;
     Init();
     InitLog();
     while(working) {
-        if (!cin.getline(ch, 640)) working = false;
-        else Solve(ch, working);
+        if (!getline(cin, str)) working = false;
+        else {
+            if (str.size() > 640) cout << "Invalid\n";
+            else { strcpy(ch, str.c_str()); Solve(ch, working);}
+        }
     }
     WriteLog();
 }

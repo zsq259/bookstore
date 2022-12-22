@@ -66,9 +66,9 @@ void CheckKeyword(const string &str, bool o) {
 int GetType(const string &str) {
     int length = str.size();
     if (length >= 6 && str.substr(0, 6) == "-ISBN=") return 4;
-    if (length >= 6 && str.substr(0, 7) == "-name=\"") return 3;
-    if (length >= 8 && str.substr(0, 9) == "-author=\"") return 2;
-    if (length >= 9 && str.substr(0, 10) == "-keyword=\"") return 1;
+    if (length >= 7 && str.substr(0, 7) == "-name=\"") return 3;
+    if (length >= 9 && str.substr(0, 9) == "-author=\"") return 2;
+    if (length >= 10 && str.substr(0, 10) == "-keyword=\"") return 1;
     if (length >= 7 && str.substr(0, 7) == "-price=") return 0;
     throw error();
 }
@@ -225,7 +225,7 @@ void Solve(const char ch[], bool &working) {
                     }
                     else if (type == 1) {
                         if (str[1][str[1].size()-1] != '\"') throw error();
-                        CheckKeyword(str[1].substr(10, str[1].size() - 11), false);
+                        CheckKeyword(str[1].substr(10, str[1].size() - 11), true);
                         strcpy(Key, str[1].substr(10, str[1].size() - 11).c_str());
                         for (int i = 0, k = strlen(Key); i < k; ++i) 
                             if (Key[i] == '|') throw error();
