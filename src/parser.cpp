@@ -181,6 +181,7 @@ void Solve(const char ch[], bool &working) {
                     price = stod(str[i].substr(7));
                 }
             }
+            if (!type) throw error();
             Modify(type, ISBN, name, author, keyword, price);
         }
         else if (str[0] == "import") {
