@@ -66,9 +66,9 @@ void CheckKeyword(const string &str, bool o) {
 int GetType(const string &str) {
     int length = str.size();
     if (length >= 6 && str.substr(0, 6) == "-ISBN=") return 4;
-    if (length >= 6 && str.substr(0, 6) == "-name=") return 3;
-    if (length >= 8 && str.substr(0, 8) == "-author=") return 2;
-    if (length >= 9 && str.substr(0, 9) == "-keyword=") return 1;
+    if (length >= 6 && str.substr(0, 7) == "-name=\"") return 3;
+    if (length >= 8 && str.substr(0, 9) == "-author=\"") return 2;
+    if (length >= 9 && str.substr(0, 10) == "-keyword=\"") return 1;
     if (length >= 7 && str.substr(0, 7) == "-price=") return 0;
     throw error();
 }
