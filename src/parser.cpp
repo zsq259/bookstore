@@ -224,6 +224,7 @@ void Solve(const char ch[], bool &working) {
                         for (int i = 0, k = strlen(Key); i < k; ++i) 
                             if (Key[i] == '|') throw error();
                     }
+                    else throw error();
                     Show(type, Key);
                 }
             }
