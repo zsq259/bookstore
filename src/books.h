@@ -14,7 +14,7 @@ class Book{
  public:
   char ISBN[22] = {}, author[62] = {}, name[62] = {};
   char keyword[62] = {};
-  int sum = 0;
+  long long sum = 0;
   double price = 0;
   Book(){}
   Book(const Book &a):sum(a.sum), price(a.price) {

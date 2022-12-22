@@ -137,9 +137,11 @@ void Modify(const int &type, const char ISBN[], const char name[],
             strncat(temp[cnt],a.keyword + i, 1);
         }
         ++cnt;
-        for (int i = 0; i < cnt; ++i) 
+        for (int i = 0; i < cnt; ++i) {
+            if (!strlen(temp[i])) throw error();
             for (int j = i + 1; j < cnt; ++j) 
                 if (!strcmp(temp[i], temp[j])) throw error();
+        }
     }
     if (type & 1) a.price = price;
     bookstack.pop();
