@@ -51,5 +51,6 @@ void Delete(const string &id);
 void Login(const string &id, const string &passwd);
 void Logout();
 int GetPrivilege();
+string NowUser();
 
 #endif

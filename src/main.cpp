@@ -22,5 +22,6 @@ int main() {
             else { strcpy(ch, str.c_str()); Solve(ch, working);}
         }
     }
+    AddLog("", "system exited!");
     WriteLog();
 }

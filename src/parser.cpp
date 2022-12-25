@@ -75,9 +75,8 @@ int GetType(const string &str) {
 
 void Solve(const char ch[], bool &working) {
     try{
-        int n = 0;
-        string str[15] = {};
-        int p = 0;
+        string str[15] = {}, user = NowUser();;
+        int n = 0, p = 0;
         while (ch[p] == ' ') ++p;
         for (int i = p, k = strlen(ch); i < k; ++i) {
             //cout << ch[i];
@@ -90,21 +89,21 @@ void Solve(const char ch[], bool &working) {
         //cout << "n=" << n << '\n';
         if (!str[0].size()) return ;
         if (str[0] == "quit" || str[0] == "exit") {
-            if (n) throw error("Invalid\n");
+            if (n) throw error();
             working = false; 
         }
         else if (str[0] == "su") {
             CheckId(str[1]);
             if (n == 2) CheckId(str[2]), Login(str[1], str[2]);
             else if (n == 1) Login(str[1], "");
-            else throw error("Invalid\n");
+            else throw error();
         }
         else if (str[0] == "logout") {
-            if (n) throw error("Invalid\n");
+            if (n) throw error();
             Logout();
         }
         else if (str[0] == "register") {
-            if (n != 3) throw error("Invalid\n");
+            if (n != 3) throw error();
             CheckId(str[1]); CheckId(str[2]);
             CheckLength(str[3], 30);
             Register(str[1], str[2], str[3]);
@@ -114,17 +113,17 @@ void Solve(const char ch[], bool &working) {
             if (n == 3) CheckId(str[3]);
             if (n == 3) Passwd(str[1], str[2], str[3]);
             else if (n == 2) Passwd(str[1], "", str[2]);
-            else throw error("Invalid\n");
+            else throw error();
         }
         else if (str[0] == "useradd") {
-            if (n != 4) throw error("Invalid\n");
+            if (n != 4) throw error();
             CheckId(str[1]); CheckId(str[2]);
             CheckLength(str[3], 1);
             CheckNumber(str[3]);
             Useradd(str[1], str[2], stoi(str[3]), str[4]);
         }
         else if (str[0] == "delete") {
-            if (n != 1) throw error("Invalid\n");
+            if (n != 1) throw error();
             CheckId(str[1]);
             Delete(str[1]);
         }
@@ -235,8 +234,9 @@ void Solve(const char ch[], bool &working) {
                 }
             }
         }
-        else if (str[0] == "log") {}
-        else throw error("Invalid\n");
+        else if (str[0] == "log") { if(n) throw error(); Log(); }
+        else throw error();
+        AddLog(user, ch);
     }
     catch (error) { cout << "Invalid\n";}
 }

@@ -5,9 +5,11 @@
 #include <cstring>
 #include "block.h"
 using std::string;
+using std::fstream;
 
-static BlockLinkList<double> logs("logs.db");
-static int logscnt;
+static BlockLinkList<double> finances("finances.db");
+static int financescnt;
+static fstream logs;
 
 void InitLog();
 void WriteLog();
@@ -15,4 +17,6 @@ void NewDeal(const double &sum);
 void ShowFinance(const int &count);
 int GetCount();
 
+void Log();
+void AddLog(const string user, const char ch[]);
 #endif

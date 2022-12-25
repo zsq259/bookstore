@@ -246,7 +246,7 @@ logout
 
 日志系统库
 
-将信息储存于`logs.db`中。
+将信息储存于`finances.db`中。
 
 ### `block.h`
 
@@ -397,7 +397,7 @@ void Import(const int &quantity, const double &cost);
 ### diary.h
 
 ```cpp
-static BlockLinkList<double> logs("logs.db");
+static BlockLinkList<double> finances("finances.db");
 static int logscnt;
 void InitLog();
 void WriteLog();
@@ -459,7 +459,7 @@ void Logout();
 
  `books_keyword.db`：以 keyword 为关键字的书籍信息。
 
-`logs.db`：信息储存。
+`finances.db`：信息储存。
 
 ## 其他补充说明
 
