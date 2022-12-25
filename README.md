@@ -275,7 +275,7 @@ logout
 │   │   ├── users.cpp
 │   └── └── users.h
 ├── CMakeLists.txt
-└─── README.md
+└── README.md
 ```
 
 
@@ -404,6 +404,8 @@ void WriteLog();
 void NewDeal(const double &sum);
 void ShowFinance(const int &count);
 int GetCount();
+void Log();
+void AddLog(const string user, const char ch[]);
 ```
 
 ### exception.h
@@ -445,21 +447,24 @@ void Useradd(const string &id, const string &passwd, const int &privilege, const
 void Delete(const string &id);
 void Login(const string &id, const string &passwd);
 void Logout();
+string NowUser();
 ```
 
 ## 文件存储说明
 
 `users.db`：账户信息。
 
- `books_ISBN.db`：以 ISBN 为关键字的书籍信息。
+`books_ISBN.db`：以 ISBN 为关键字的书籍信息。
 
- `books_name.db`：以 name 为关键字的书籍信息。
+`books_name.db`：以 name 为关键字的书籍信息。
 
- `books_author.db`：以 author 为关键字的书籍信息。
+`books_author.db`：以 author 为关键字的书籍信息。
 
- `books_keyword.db`：以 keyword 为关键字的书籍信息。
+`books_keyword.db`：以 keyword 为关键字的书籍信息。
 
-`finances.db`：信息储存。
+`finances.db`：财务信息储存。
+
+`logs.db`：指令日志储存。
 
 ## 其他补充说明
 
@@ -474,4 +479,6 @@ void Logout();
 2022/12/15：完善了对块状链表库`block.h`及账户系统库`users.h`的描述。
 
 2022/12/21：完善了代码文件结构，完善了对图书库`books.h`，日志系统库`diary.h`，错误库`excepton.h`以及语法分析`parser.h`的描述，完善了文件存储说明。
+
+2022/12/25：完善了对日志生成相关的描述。
 
