@@ -8,6 +8,6 @@
 #include "diary.h"
 #include "block.h"
 
-void Solve(const char ch[], bool &working);
+void Solve(const char ch[], bool &working); //process the command 
 
 #endif

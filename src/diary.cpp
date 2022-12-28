@@ -13,17 +13,17 @@ using std::setprecision;
 using std::string;
 using std::to_string;
 
-void InitLog() {
+void InitLog() { // get how many previous counts
     vector<double> v;
     finances.Find(to_string(0).c_str(), v);
     if (!v.empty()) financescnt = v.back();
 }
 
-void WriteLog() {
+void WriteLog() { // write how many counts until system close 
     finances.Insert(Node<double>(to_string(0).c_str(), financescnt));
 }
 
-void NewDeal(const double &sum) {
+void NewDeal(const double &sum) { // add a deal
     ++financescnt;
     finances.Insert(Node<double>(to_string(financescnt).c_str(), sum));
 }
@@ -42,7 +42,7 @@ void ShowFinance(const int &count) {
     cout << fixed << setprecision(2) << "+ " << in << " - " << out << '\n';
 }
 
-int GetCount() { return financescnt; }
+int GetCount() { return financescnt; } // how many counts
 
 void Log() {
     if (GetPrivilege() < 7) throw error();

@@ -79,14 +79,10 @@ void Solve(const char ch[], bool &working) {
         int n = 0, p = 0;
         while (ch[p] == ' ') ++p;
         for (int i = p, k = strlen(ch); i < k; ++i) {
-            //cout << ch[i];
             if (ch[i] <= 31 || ch[i] >= 127) throw error();
             if (ch[i] == ' ') { if(i + 1 < k && ch[i+1] != ' ') ++n; continue; }
             str[n] += ch[i];
         }
-        //for (int i = 0; i <= n; ++i) cout << str[i] << ' ';
-        //cout << '\n';
-        //cout << "n=" << n << '\n';
         if (!str[0].size()) return ;
         if (str[0] == "quit" || str[0] == "exit") {
             if (n) throw error();
@@ -160,7 +156,6 @@ void Solve(const char ch[], bool &working) {
                     CheckKeyword(str[i].substr(7, str[i].size() - 8), false);
                     strcpy(name, str[i].substr(7, str[i].size() - 8).c_str());
                     if (!strlen(name)) throw error();
-                    //cout << "name=" << name << '\n';
                 }
                 else if (o == 2) {
                     if (str[i][str[i].size()-1] != '\"') throw error();

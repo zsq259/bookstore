@@ -43,7 +43,7 @@ class User {
 static BlockLinkList<User> array("users.db");
 static stack<User> userstack;
 
-void Init();
+void Init(); // creat a super uesr root
 void Register(const string &id, const string &passwd, const string &name);
 void Passwd(const string &id, const string &curpasswd, const string &passwd);
 void Useradd(const string &id, const string &passwd, const int &privilege, const string &name);
@@ -51,6 +51,6 @@ void Delete(const string &id);
 void Login(const string &id, const string &passwd);
 void Logout();
 int GetPrivilege();
-string NowUser();
+string NowUser(); // top of userstack
 
 #endif

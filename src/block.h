@@ -116,7 +116,6 @@ class BlockNode {
   void insertNode(const Node<T> &a) {
     int p = 0;
     while (p < Info.size && values[p] < a) ++p; //the first one who >= a
-    //p = std::upper_bound(values, values + size, a) - values;
     for (int i = Info.size - 1; i >= p; --i) values[i + 1] = values[i];
     values[p] = a;
     ++Info.size;

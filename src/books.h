@@ -12,7 +12,7 @@ using std::stack;
 
 class Book{
  public:
-  char ISBN[22] = {}, author[62] = {}, name[62] = {};
+  char ISBN[22] = {}, author[62] = {}, name[62] = {}; //std::string can't be written in a file
   char keyword[62] = {};
   long long sum = 0;
   double price = 0;
@@ -48,7 +48,7 @@ static BlockLinkList<Book> books_ISBN("books_ISBN.db");
 static BlockLinkList<Book> books_name("books_name.db");
 static BlockLinkList<Book> books_author("books_author.db");
 static BlockLinkList<Book> books_keyword("books_keyword.db");
-static stack<Book> bookstack;
+static stack<Book> bookstack; // books selected by users in uesrstack
 
 void StackPop();
 void StackPush(const Book &a);

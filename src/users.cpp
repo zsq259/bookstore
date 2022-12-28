@@ -2,7 +2,7 @@
 #include "users.h"
 #include "books.h"
 
-void Init() {
+void Init() { // creat a super uesr root
     char userid[32] = "root";
     User a(userid, "sjtu", "root", 7);
     vector<User> v;
@@ -103,7 +103,7 @@ int GetPrivilege() {
     return userstack.top().privilege;
 }
 
-string NowUser() {
+string NowUser() { // top of userstack
     if (userstack.empty()) return "guest";
     return userstack.top().username; 
 }
