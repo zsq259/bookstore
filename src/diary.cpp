@@ -49,7 +49,6 @@ void Log() {
     cout << "-------log-------\n";
     logs.open("logs.db", fstream::in);
     if (!logs) {
-        puts("ojbk");
         logs.close();
         logs.open("logs.db", fstream::out);
         logs.close();
@@ -60,15 +59,18 @@ void Log() {
     while(logs.getline(ch, 640)) {
         cout << ch << '\n';
     }
+    logs.close();
     cout << "-----finances----\n";
     vector<double> v;
-    for (int i = 0; i < financescnt; ++i) {
+    double ret = 0;
+    for (int i = 1; i <= financescnt; ++i) {
         finances.Find(to_string(i).c_str(), v);
-        double ret = v.back();
+        ret = v.back();
         if (ret >= 0) cout << fixed << setprecision(2) << "+ " << ret << '\n';
         else cout << fixed << setprecision(2) << "- " << -ret << '\n';
     }
-    logs.close();
+    cout << "sum: ";
+    ShowFinance(financescnt);
     cout << "-----------------\n";
 }
 
